@@ -10,7 +10,7 @@ create table if not exists user(
     first_name              varchar(255)    not null,
     last_name               varchar(255)    not null,
     email                   varchar(255)    not null unique,
-    is_admin                varchar(5)		not null,
+    is_admin                varchar(5),
     password                varchar(255)    not null
 );
 

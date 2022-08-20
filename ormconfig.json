@@ -6,8 +6,8 @@
     "password": "root",
     "database": "raiseguard",
     "entities": [
-        "src/models/*.ts"
+        "src/entity/*.ts"
     ],
     "logging": false,
-    "synchronize": true
+    "synchronize": false
 }

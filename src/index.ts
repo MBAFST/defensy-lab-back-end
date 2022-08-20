@@ -1,13 +1,15 @@
 import express, { Request, Response } from "express";
+import { createConnection } from "typeorm";
+import { routes } from "./routes";
 
-const app = express();
+createConnection().then(() => {
+    const app = express();
 
-app.use(express.json());
+    app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
-    res.send("Hello");
+    routes(app);
+
+    app.listen(8000, () => {
+        console.log("Listening to port 8000");
 });
-
-app.listen(8000, () => {
-    console.log("Listening to port 8000");
 });
