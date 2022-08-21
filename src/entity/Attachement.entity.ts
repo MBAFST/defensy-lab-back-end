@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Incident } from "./Incident";
+import { Incident } from "./Incident.entity";
 
 @Entity()
 export class Attachement{
-    @PrimaryGeneratedColumn({name : "incident_id"})
+    @Column({name : "incident_id"})
     id : Number;
 
     @Column()
