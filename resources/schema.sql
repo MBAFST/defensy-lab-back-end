@@ -16,18 +16,17 @@ create table if not exists user(
 
 create table if not exists token(
     id                      bigint          not null primary key AUTO_INCREMENT,
-    refresh_token           varchar(255)    not null,
+    user_id                 bigint          not null,
+    token                   varchar(255)    not null,
     expired_at              datetime        not null,
     issued_at               datetime        not null,
-    user                    bigint          not null,
-    constraint fk_token_user foreign key (user) references user(id)
+    constraint fk_token_user foreign key (user_id) references user(id)
 );
 
-create table if not exists password_recovery(
+create table if not exists reset(
     id                      bigint          not null primary key AUTO_INCREMENT,
-    token                   varchar(255)    not null,
-    user                    bigint          not null,
-    constraint fk_password_recovery_user foreign key (user) references user(id)
+    email                   varchar(255)    not null,
+    token                   varchar(255)    not null unique
 );
 
 create table if not exists client(
