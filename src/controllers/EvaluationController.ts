@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
-import { Evaluation } from "../models/Evaluation";
+import { Evaluation } from "../entity/Evaluation";
 class EvaluationController {
     static Post=async(req:Request, res:Response)=>{
         const newEval={
@@ -23,6 +23,21 @@ class EvaluationController {
  static Get=async(req:Request, res:Response)=>{
     const result = await getRepository(Evaluation).find();
     return res.json(result);
+ };
+ static GetOne=async(req:Request, res:Response)=>{
+    const id = parseInt(req.params.id);
+    const Eval = await getRepository(Evaluation).findOneById(id);
+    return res.json(Eval);
+ };
+ static Update=async(req:Request, res:Response)=>{
+    const id = parseInt(req.params.id);
+    const Eval = await getRepository(Evaluation).findOneById(id);
+     if(Eval){
+        getRepository(Evaluation).merge(Eval,req.body);
+        const result = await getRepository(Evaluation).save(Eval);
+        return res.json(result);
+     }
+    return res.json({msg : "Evaluation not found"});
  };
 }
 export default EvaluationController;
