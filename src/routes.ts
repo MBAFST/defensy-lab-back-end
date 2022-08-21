@@ -1,6 +1,15 @@
 import { Router } from "express";
 import { Register, Login, AuthenticatedUser, Refresh, Logout } from "./controller/auth.controller";
 import { ForgotPassword, ResetPassword } from "./controller/forgot.controller";
+import { ClientController } from "./controller/client.controller";
+import { ActionsController } from "./controller/actions.controller";
+import { IncidentController } from "./controller/incident.controller";
+import { AttachementController } from "./controller/attachement.controller";
+import { EvaluationController } from "./controller/evaluation.controller";
+import { FollowUpController } from "./controller/follow-up.controller";
+import { InformationController } from "./controller/information.controller";
+import { NotificationController } from "./controller/notification.controller";
+import { ResumeController } from "./controller/resume.controller";
 
 export const routes = (router: Router) => {
     router.post("/api/register", Register);
@@ -10,4 +19,32 @@ export const routes = (router: Router) => {
     router.post("/api/logout", Logout);
     router.post("/api/forgot", ForgotPassword);
     router.post("/api/reset", ResetPassword);
+    router.get("/api/user/:id", ClientController.get);
+    router.post("/api/user/:id", ClientController.create);
+    router.put("/api/user/:id", ClientController.update);
+    router.delete("/api/user/:id", ClientController.delete);
+    router.get("/api/user/:id/incident/:id2", IncidentController.get);
+    router.post("/api/user/:id", IncidentController.create);
+    router.delete("/api/user/:id/incident/:id2", IncidentController.delete);
+    router.get("/api/user/:id/incident/:id2/actions", ActionsController.get);
+    router.post("/api/user/:id/incident/:id2/actions", ActionsController.create);
+    router.put("/api/user/:id/incident/:id2/actions", ActionsController.update);
+    router.get("/api/user/:id/incident/:id2/attachement", AttachementController.get);
+    router.post("/api/user/:id/incident/:id2/attachement", AttachementController.create);
+    router.put("/api/user/:id/incident/:id2/attachement", AttachementController.update);
+    router.get("/api/user/:id/incident/:id2/evaluation", EvaluationController.get);
+    router.post("/api/user/:id/incident/:id2/evaluation", EvaluationController.create);
+    router.put("/api/user/:id/incident/:id2/evaluation", EvaluationController.update);
+    router.get("/api/user/:id/incident/:id2/follow-up", FollowUpController.get);
+    router.post("/api/user/:id/incident/:id2/follow-up", FollowUpController.create);
+    router.put("/api/user/:id/incident/:id2/follow-up", FollowUpController.update);
+    router.get("/api/user/:id/incident/:id2/information", InformationController.get);
+    router.post("/api/user/:id/incident/:id2/information", InformationController.create);
+    router.put("/api/user/:id/incident/:id2/information", InformationController.update);
+    router.get("/api/user/:id/incident/:id2/notification", NotificationController.get);
+    router.post("/api/user/:id/incident/:id2/notification", NotificationController.create);
+    router.put("/api/user/:id/incident/:id2/notification", NotificationController.update);
+    router.get("/api/user/:id/incident/:id2/resume", ResumeController.get);
+    router.post("/api/user/:id/incident/:id2/resume", ResumeController.create);
+    router.put("/api/user/:id/incident/:id2/resume", ResumeController.update);
 }
