@@ -5,7 +5,6 @@ import { createTransport } from "nodemailer";
 import { User } from "../entity/user.entity";
 import bcryptjs from "bcryptjs"
 
-
 export const ForgotPassword = async (req: Request, res: Response) => {
     const { email } = req.body;
     const token = Math.random().toString(20).substring(2, 12);
