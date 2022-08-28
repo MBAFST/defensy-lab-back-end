@@ -49,10 +49,8 @@ export const Create = async (req: Request, res: Response) => {
             });
         }
 
-		const body = req.body;
-
 		const information = await getRepository(Incident).save({
-			userId: parseInt(body["user-id"]),
+			userId: parseInt(req.params["id"]),
 		});
 		
 		res.send(information);

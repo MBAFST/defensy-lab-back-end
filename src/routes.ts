@@ -24,7 +24,7 @@ export const routes = (router: Router) => {
     router.put("/api/user/:id", Client.Update);
     router.delete("/api/user/:id", Client.Delete);
     router.get("/api/user/:id/incident/:id2", Incident.Get);
-    router.post("/api/user/:id", Incident.Create);
+    router.post("/api/user/:id/incident", Incident.Create);
     router.delete("/api/user/:id/incident/:id2", Incident.Delete);
     router.get("/api/user/:id/incident/:id2/actions", Actions.Get);
     router.post("/api/user/:id/incident/:id2/actions", Actions.Create);
