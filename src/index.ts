@@ -12,7 +12,7 @@ createConnection().then(() => {
     app.use(express.json());
     app.use(cookieParser());
     app.use(cors({
-        origin: ["http://localhost:3000", "http://localhost:4200", "http://localhost:8080"],
+        origin: ["http://localhost:3000", "http://localhost:4200", "http://localhost:5173", "http://localhost:8080"],
         credentials: true
     }));
 
