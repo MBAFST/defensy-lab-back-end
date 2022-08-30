@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as Auth from "./controller/auth.controller";
 import * as Forgot from "./controller/forgot.controller";
+import * as Admin from "./controller/admin.controller";
 import * as Client from "./controller/client.controller";
 import * as Actions from "./controller/actions.controller";
 import * as Incident from "./controller/incident.controller";
@@ -19,13 +20,15 @@ export const routes = (router: Router) => {
     router.post("/api/logout", Auth.Logout);
     router.post("/api/forgot", Forgot.ForgotPassword);
     router.post("/api/reset", Forgot.ResetPassword);
+    router.get("/api/admin", Admin.GetAll);
+    router.get("/api/admin/:id", Admin.Get);
+    router.delete("/api/admin/:id", Admin.Delete);
     router.get("/api/user/:id", Client.Get);
     router.post("/api/user/:id", Client.Create);
     router.put("/api/user/:id", Client.Update);
     router.delete("/api/user/:id", Client.Delete);
     router.get("/api/user/:id/incident/:id2", Incident.Get);
     router.post("/api/user/:id/incident", Incident.Create);
-    router.delete("/api/user/:id/incident/:id2", Incident.Delete);
     router.get("/api/user/:id/incident/:id2/actions", Actions.Get);
     router.post("/api/user/:id/incident/:id2/actions", Actions.Create);
     router.put("/api/user/:id/incident/:id2/actions", Actions.Update);

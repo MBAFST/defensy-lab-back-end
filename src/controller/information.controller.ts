@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { Information } from "../entity/information.entity";
+import { User } from "../entity/user.entity";
 
 export const Get = async (req: Request, res: Response) => {
 	try {
@@ -10,6 +11,18 @@ export const Get = async (req: Request, res: Response) => {
         const payload: any = verify(accessToken, process.env.ACCESS_TOKEN || "");
 
         if (!payload) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
             return res.status(401).send({
                 message: "unauthenticated"
             });
@@ -47,6 +60,18 @@ export const Create = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const body = req.body;
 
 		await getRepository(Information).save({
@@ -78,6 +103,18 @@ export const Update = async (req: Request, res: Response) => {
         const payload: any = verify(accessToken, process.env.ACCESS_TOKEN || "");
 
         if (!payload) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
             return res.status(401).send({
                 message: "unauthenticated"
             });

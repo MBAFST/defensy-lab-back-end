@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { getRepository } from "typeorm";
-import { Attachement } from "../entity/attachement.entity";
+import { Attachments } from "../entity/attachments.entity";
+import { User } from "../entity/user.entity";
 
 export const Get = async (req: Request, res: Response) => {
 	try {
@@ -15,7 +16,19 @@ export const Get = async (req: Request, res: Response) => {
             });
         }
 
-		const attachement = await getRepository(Attachement).findOne({
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
+		const attachement = await getRepository(Attachments).findOne({
 			where: {
 				id: parseInt(req.params["id2"])
 			}
@@ -48,9 +61,21 @@ export const Create = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const body = req.body;
 
-		await getRepository(Attachement).save({
+		await getRepository(Attachments).save({
 			id: parseInt(req.params["id2"]),
 			image1: body["image-1"],
 			image2: body["image-2"],
@@ -86,9 +111,21 @@ export const Update = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const body = req.body;
 
-		await getRepository(Attachement).update(parseInt(req.params["id2"]), {
+		await getRepository(Attachments).update(parseInt(req.params["id2"]), {
 			image1: body["image-1"],
 			image2: body["image-2"],
 			image3: body["image-3"],

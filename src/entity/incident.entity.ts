@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export abstract class Incident {
-    @PrimaryGeneratedColumn({name : "incident_id"})
+    @PrimaryGeneratedColumn()
     id!: number;
 
     @Column({ name: "user_id" })

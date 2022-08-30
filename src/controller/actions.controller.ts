@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { Actions } from "../entity/actions.entity";
+import { User } from "../entity/user.entity";
 
 export const Get = async (req: Request, res: Response) => {
 	try {
@@ -15,6 +16,18 @@ export const Get = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const actions = await getRepository(Actions).findOne({
 			where: {
 				id: parseInt(req.params["id2"])
@@ -23,10 +36,10 @@ export const Get = async (req: Request, res: Response) => {
 		
 		res.send({	
 			"identification-measures": actions?.identificationMeasures,
-			"restrain-measures": actions?.restrainMeasures,
+			"restraint-measures": actions?.restraintMeasures,
 			"evidence-collected": actions?.evidenceCollected,
 			"eradication-measures": actions?.eradicationMeasures,
-			"recovery-measures": actions?.recoveryMeasures,
+			"recovery-measure": actions?.recoveryMeasure,
 			"other-mitigation-measures": actions?.otherMitigationMeasures
 		});
 	}
@@ -48,25 +61,37 @@ export const Create = async (req: Request, res: Response) => {
                 message: "unauthenticated"
             });
         }
+
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
 		
 		const body = req.body;
 
 		await getRepository(Actions).save({
 			id: parseInt(req.params["id2"]),
 			identificationMeasures: body["identification-measures"],
-			restrainMeasures: body["restrain-measures"],
+			restrainMeasures: body["restraint-measures"],
 			evidenceCollected: body["evidence-collected"],
 			eradicationMeasures: body["eradication-measures"],
-			recoveryMeasures: body["recovery-measures"],
+			recoveryMeasures: body["recovery-measure"],
 			otherMitigationMeasures: body["other-mitigation-measures"]
 		});
 		
 		res.send({	
 			"identification-measures": body["identification-measures"],
-			"restrain-measures": body["restrain-measures"],
+			"restraint-measures": body["restraint-measures"],
 			"evidence-collected": body["evidence-collected"],
 			"eradication-measures": body["eradication-measures"],
-			"recovery-measures": body["recovery-measures"],
+			"recovery-measure": body["recovery-measure"],
 			"other-mitigation-measures": body["other-mitigation-measures"]
 		});
 	}
@@ -88,24 +113,36 @@ export const Update = async (req: Request, res: Response) => {
                 message: "unauthenticated"
             });
         }
+
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
 	
 		const body = req.body;
 
 		await getRepository(Actions).update(parseInt(req.params["id2"]), {
 			identificationMeasures: body["identification-measures"],
-			restrainMeasures: body["restrain-measures"],
+			restraintMeasures: body["restraint-measures"],
 			evidenceCollected: body["evidence-collected"],
 			eradicationMeasures: body["eradication-measures"],
-			recoveryMeasures: body["recovery-measures"],
+			recoveryMeasure: body["recovery-measure"],
 			otherMitigationMeasures: body["other-mitigation-measures"]
 		});
 		
 		res.send({	
 			"identification-measures": body["identification-measures"],
-			"restrain-measures": body["restrain-measures"],
+			"restraint-measures": body["restraint-measures"],
 			"evidence-collected": body["evidence-collected"],
 			"eradication-measures": body["eradication-measures"],
-			"recovery-measures": body["recovery-measures"],
+			"recovery-measure": body["recovery-measure"],
 			"other-mitigation-measures": body["other-mitigation-measures"]
 		});
 	}

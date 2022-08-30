@@ -5,8 +5,8 @@ export class Evaluation{
     @PrimaryColumn()
     id!: number;
 
-    @Column({ name: "member_reaction" })
-    memberReaction!: string ;
+    @Column({ name: "members_reaction" })
+    membersReaction!: string;
 
     @Column({ name: "documenting_procedures" })
     documentingProcedures!: string;

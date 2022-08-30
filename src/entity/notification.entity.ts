@@ -7,4 +7,7 @@ export class Notification {
 
     @Column()
     notifier!: number;
+    
+    @Column()
+    other!: string;
 }

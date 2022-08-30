@@ -56,6 +56,18 @@ export const Create = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const body = req.body;
 		
 		const user = await getRepository(User).findOne({
@@ -98,6 +110,18 @@ export const Update = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const body = req.body;
 
 		const user = await getRepository(User).findOne({
@@ -134,6 +158,18 @@ export const Delete = async (req: Request, res: Response) => {
         const payload: any = verify(accessToken, process.env.ACCESS_TOKEN || "");
 
         if (!payload) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
             return res.status(401).send({
                 message: "unauthenticated"
             });

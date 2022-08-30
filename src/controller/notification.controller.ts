@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { Notification } from "../entity/notification.entity";
+import { User } from "../entity/user.entity";
 
 export const Get = async (req: Request, res: Response) => {
 	try {
@@ -15,6 +16,18 @@ export const Get = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const notification = await getRepository(Notification).findOne({
 			where: {
 				id: parseInt(req.params["id2"])
@@ -22,7 +35,8 @@ export const Get = async (req: Request, res: Response) => {
 		});
 		
 		res.send({
-			"notifier": notification?.notifier
+			"notifier": notification?.notifier,
+            "other": notification?.other
 		});
 	}
     catch (e) {
@@ -44,15 +58,29 @@ export const Create = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const body = req.body;
 
 		await getRepository(Notification).save({
 			id: parseInt(req.params["id2"]),
-			notifier: body["notifier"]
+			notifier: body["notifier"],
+            other: body["other"]
 		});
 		
 		res.send({
-			"notifier": body["notifier"]
+			"notifier": body["notifier"],
+            "other": body["other"]
 		});
 	}
     catch (e) {
@@ -74,14 +102,28 @@ export const Update = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const body = req.body;
 
 		await getRepository(Notification).update(parseInt(req.params["id2"]), {
-			notifier: body["notifier"]
+			notifier: body["notifier"],
+            other: body["other"]
 		});
 		
 		res.send({
-			"notifier": body["notifier"]
+			"notifier": body["notifier"],
+            "other": body["other"]
 		});
 	}
     catch (e) {
