@@ -6,10 +6,10 @@ export class FollowUp {
     id!: number;
 
     @Column()
-    reviwer!: number;
+    reviewer!: number;
     
-    @Column({ name: "recommended_actions" })
-    recommendedActions!: string;
+    @Column({ name: "recommanded_actions" })
+    recommandedActions!: string;
     
     @Column()
     rapporter!: string;

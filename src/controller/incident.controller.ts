@@ -1,14 +1,8 @@
 import { Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { getRepository } from "typeorm";
-import { Actions } from "../entity/actions.entity";
-import { Attachement } from "../entity/attachement.entity";
-import { Evaluation } from "../entity/evaluation.entity";
-import { FollowUp } from "../entity/follow-up.entity";
 import { Incident } from "../entity/incident.entity";
-import { Information } from "../entity/information.entity";
-import { Notification } from "../entity/notification.entity";
-import { Resume } from "../entity/resume.entity";
+import { User } from "../entity/user.entity";
 
 export const Get = async (req: Request, res: Response) => {
 	try {
@@ -22,13 +16,25 @@ export const Get = async (req: Request, res: Response) => {
             });
         }
 
-		const information = await getRepository(Incident).findOne({
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
+		const incident = await getRepository(Incident).findOne({
 			where: {
 				id: parseInt(req.params["id2"])
 			}
 		});
 
-		res.send(information);
+		res.send(incident);
 	}
     catch (e) {
         return res.status(401).send({
@@ -49,46 +55,26 @@ export const Create = async (req: Request, res: Response) => {
             });
         }
 
-		const information = await getRepository(Incident).save({
-			userId: parseInt(req.params["id"]),
-		});
-		
-		res.send(information);
-	}
-    catch (e) {
-        return res.status(401).send({
-            message: "unauthenticated"
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
         });
-    }
-};
 
-export const Delete = async(req:Request, res:Response)=>{
-	try {
-        const accessToken = req.header("Authorization")?.split(" ")[1] || "";
-
-        const payload: any = verify(accessToken, process.env.ACCESS_TOKEN || "");
-
-        if (!payload) {
+        if (!auth) {
             return res.status(401).send({
                 message: "unauthenticated"
             });
         }
 
-		await getRepository(Actions).delete({ id: parseInt(req.params["id2"]) });
-		await getRepository(Attachement).delete({ id: parseInt(req.params["id2"]) });
-		await getRepository(Evaluation).delete({ id: parseInt(req.params["id2"]) });
-		await getRepository(FollowUp).delete({ id: parseInt(req.params["id2"]) });
-		await getRepository(Information).delete({ id: parseInt(req.params["id2"]) });
-		await getRepository(Notification).delete({ id: parseInt(req.params["id2"]) });
-		await getRepository(Resume).delete({ id: parseInt(req.params["id2"]) });
+		const incident = await getRepository(Incident).save({
+			userId: parseInt(req.params["id"]),
+		});
 		
-		await getRepository(Incident).delete({
-			id: parseInt(req.params["id2"])
-		});
-
 		res.send({
-			message: "success"
-		});
+            "id": incident.id,
+            "user-id": incident.userId
+        });
 	}
     catch (e) {
         return res.status(401).send({

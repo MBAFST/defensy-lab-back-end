@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class Attachement {
+export class Attachments {
     @PrimaryColumn()
     id!: number;
 

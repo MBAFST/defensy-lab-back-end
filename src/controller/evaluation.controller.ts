@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { Evaluation } from "../entity/evaluation.entity";
+import { User } from "../entity/user.entity";
 
 export const Get = async (req: Request, res: Response) => {
 	try {
@@ -15,6 +16,18 @@ export const Get = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const evaluation = await getRepository(Evaluation).findOne({
 			where: {
 				id: parseInt(req.params["id2"])
@@ -22,8 +35,9 @@ export const Get = async (req: Request, res: Response) => {
 		});
 		
 		res.send({
-			"member-reaction": evaluation?.memberReaction,
+			"members-reaction": evaluation?.membersReaction,
 			"documenting-procedures": evaluation?.documentingProcedures,
+			"needed-information": evaluation?.neededInformation,
 			"actions-could-prevented-recovery": evaluation?.actionsCouldPreventedRecovery,
 			"members-must-do": evaluation?.membersMustDo,
 			"correct-actions": evaluation?.correctActions,
@@ -50,12 +64,25 @@ export const Create = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const body = req.body;
 
 		await getRepository(Evaluation).save({
 			id: parseInt(req.params["id2"]),
-			memberReaction: body["member-reaction"],
+			memberReaction: body["members-reaction"],
 			documentingProcedures: body["documenting-procedures"],
+			neededInformation: body["needed-information"],
 			actionsCouldPreventedRecovery: body["actions-could-prevented-recovery"],
 			membersMustDo: body["members-must-do"],
 			correctActions: body["correct-actions"],
@@ -64,8 +91,9 @@ export const Create = async (req: Request, res: Response) => {
 		});
 		
 		res.send({
-			"member-reaction": body["member-reaction"],
+			"members-reaction": body["members-reaction"],
 			"documenting-procedures": body["documenting-procedures"],
+			"needed-information": body["needed-information"],
 			"actions-could-prevented-recovery": body["actions-could-prevented-recovery"],
 			"members-must-do": body["members-must-do"],
 			"correct-actions": body["correct-actions"],
@@ -92,11 +120,24 @@ export const Update = async (req: Request, res: Response) => {
             });
         }
 
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
 		const body = req.body;
 
 		await getRepository(Evaluation).update(parseInt(req.params["id2"]), {
-			memberReaction: body["member-reaction"],
+			membersReaction: body["members-reaction"],
 			documentingProcedures: body["documenting-procedures"],
+			neededInformation: body["needed-information"],
 			actionsCouldPreventedRecovery: body["actions-could-prevented-recovery"],
 			membersMustDo: body["members-must-do"],
 			correctActions: body["correct-actions"],
@@ -105,8 +146,9 @@ export const Update = async (req: Request, res: Response) => {
 		});
 		
 		res.send({
-			"member-reaction": body["member-reaction"],
+			"members-reaction": body["members-reaction"],
 			"documenting-procedures": body["documenting-procedures"],
+			"needed-information": body["needed-information"],
 			"actions-could-prevented-recovery": body["actions-could-prevented-recovery"],
 			"members-must-do": body["members-must-do"],
 			"correct-actions": body["correct-actions"],
