@@ -11,6 +11,7 @@ import * as FollowUp from "./controller/follow-up.controller";
 import * as Information from "./controller/information.controller";
 import * as Notification from "./controller/notification.controller";
 import * as Resume from "./controller/resume.controller";
+import * as Document from "./controller/document.controller";
 
 export const routes = (router: Router) => {
     router.post("/api/register", Auth.Register);
@@ -28,6 +29,7 @@ export const routes = (router: Router) => {
     router.put("/api/user/:id", Client.Update);
     router.delete("/api/user/:id", Client.Delete);
     router.get("/api/incident", Incident.GetAll);
+    router.get("/api/incident/:id", Document.Get);
     router.get("/api/user/:id/incident/:id2", Incident.Get);
     router.post("/api/user/:id/incident", Incident.Create);
     router.get("/api/user/:id/incident/:id2/actions", Actions.Get);
