@@ -43,11 +43,13 @@ export const GetAll = async (req: Request, res: Response) => {
 
         for (let incident of incidents) {
             for (let user of users) {
-                if (incident.userId === user.id)
+                if (incident.userId === user?.id)
                     documents.push({
-                        "id": incident.id,
-                        "first-name": user?.firstName,
-                        "last-name": user?.lastName
+                    	"id": incident.id,
+                    	"first-name": user.firstName,
+                    	"last-name": user.lastName,
+                    	"email": user.email,
+                    	"username": user.username
                     });
             }
         }
@@ -62,7 +64,6 @@ export const GetAll = async (req: Request, res: Response) => {
         });
     }
 };
-
 
 export const Get = async (req: Request, res: Response) => {
 	try {
