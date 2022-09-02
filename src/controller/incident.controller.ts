@@ -46,7 +46,8 @@ export const GetAll = async (req: Request, res: Response) => {
                     "last-name": user.lastName,
                     "email": user.email,
                     "username": user.username,
-                    "is-admin": user.isAdmin
+                    "is-admin": user.isAdmin,
+                    "user-id": user.id
                 });
         }
 

@@ -151,3 +151,105 @@ export const Get = async (req: Request, res: Response) => {
         });
     }
 };
+
+
+export const Create = async (req: Request, res: Response) => {
+	try {
+        const accessToken = req.header("Authorization")?.split(" ")[1] || "";
+
+        const payload: any = verify(accessToken, process.env.ACCESS_TOKEN || "");
+
+        if (!payload) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
+        const auth = await getRepository(User).findOne({
+            where: {
+                id: payload["id"]
+            }
+        });
+
+        if (!auth) {
+            return res.status(401).send({
+                message: "unauthenticated"
+            });
+        }
+
+		const incident = await getRepository(Incident).save({
+			userId: parseInt(req.params["id"]),
+		});
+
+		const body = req.body;
+
+		await getRepository(Actions).save({
+			id: incident.id,
+			identificationMeasures: body["identification-measures"],
+			restrainMeasures: body["restraint-measures"],
+			evidenceCollected: body["evidence-collected"],
+			eradicationMeasures: body["eradication-measures"],
+			recoveryMeasures: body["recovery-measure"],
+			otherMitigationMeasures: body["other-mitigation-measures"]
+		});
+
+		await getRepository(Attachments).save({
+			id: incident.id,
+			image1: body["image-1"],
+			image2: body["image-2"],
+			image3: body["image-3"],
+			image4: body["image-4"],
+			image5: body["image-5"]
+		});
+
+		await getRepository(Evaluation).save({
+			id: incident.id,
+			memberReaction: body["members-reaction"],
+			documentingProcedures: body["documenting-procedures"],
+			neededInformation: body["needed-information"],
+			actionsCouldPreventedRecovery: body["actions-could-prevented-recovery"],
+			membersMustDo: body["members-must-do"],
+			correctActions: body["correct-actions"],
+			additionalResourcesNeeded: body["additional-resources-needed"],
+			otherRecommandations: body["other-recommandations"]
+		});
+
+		await getRepository(FollowUp).save({
+			id: incident.id,
+			reviewer: body["reviewer"],
+			recommendedActions: body["recommanded-actions"],
+			rapporter: body["rapporter"],
+			carredOut: body["carred-out"]
+		});
+
+		await getRepository(Information).save({
+			id: incident.id,
+			dateOfNotification: body["date-of-notification"],
+			tier: body["tier"],
+			dateOfDetection: body["date-of-detection"],
+			typeOfSoftware: body["type-of-software"]
+		});
+
+		await getRepository(Notification).save({
+			id: incident.id,
+			notifier: body["notifier"],
+            other: body["other"]
+		});
+
+		await getRepository(Resume).save({
+			id: incident.id,
+			detectionType: body["detection-type"],
+			description: body["description"],
+			members: body["members"]
+		});
+
+		res.send({
+            message: "success"
+        });
+	}
+    catch (e) {
+        return res.status(401).send({
+            message: "unauthenticated"
+        });
+    }
+};
