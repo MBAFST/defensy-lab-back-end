@@ -186,10 +186,10 @@ export const Create = async (req: Request, res: Response) => {
 		await getRepository(Actions).save({
 			id: incident.id,
 			identificationMeasures: body["identification-measures"],
-			restrainMeasures: body["restraint-measures"],
+			restraintMeasures: body["restraint-measures"],
 			evidenceCollected: body["evidence-collected"],
 			eradicationMeasures: body["eradication-measures"],
-			recoveryMeasures: body["recovery-measure"],
+			recoveryMeasure: body["recovery-measure"],
 			otherMitigationMeasures: body["other-mitigation-measures"]
 		});
 
@@ -204,7 +204,7 @@ export const Create = async (req: Request, res: Response) => {
 
 		await getRepository(Evaluation).save({
 			id: incident.id,
-			memberReaction: body["members-reaction"],
+			membersReaction: body["members-reaction"],
 			documentingProcedures: body["documenting-procedures"],
 			neededInformation: body["needed-information"],
 			actionsCouldPreventedRecovery: body["actions-could-prevented-recovery"],
@@ -217,7 +217,7 @@ export const Create = async (req: Request, res: Response) => {
 		await getRepository(FollowUp).save({
 			id: incident.id,
 			reviewer: body["reviewer"],
-			recommendedActions: body["recommanded-actions"],
+			recommandedActions: body["recommanded-actions"],
 			rapporter: body["rapporter"],
 			carredOut: body["carred-out"]
 		});
@@ -244,7 +244,7 @@ export const Create = async (req: Request, res: Response) => {
 		});
 
 		res.send({
-            message: "success"
+            message: incident.id
         });
 	}
     catch (e) {

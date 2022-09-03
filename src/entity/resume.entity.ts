@@ -6,7 +6,7 @@ export class Resume {
     id!: number;
 
     @Column({ name: "detection_type" })
-    detectionType!: string;
+    detectionType!: number;
 
     @Column()
     description!: string;
