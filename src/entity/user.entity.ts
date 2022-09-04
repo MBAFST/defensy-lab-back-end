@@ -17,10 +17,18 @@ export class User {
     @Column({ unique: true })
     email!: string;
 
+	@Column()
+	contact!: string;
+
+	@Column()
+	place!: string;
+
     @Column()
     password!: string;
 
-
     @Column({ name: "is_admin" })
     isAdmin!: string;
+    
+    @Column("blob",{ nullable:true, name:"profil_photo" })
+	profilPhoto?: Buffer;
 }

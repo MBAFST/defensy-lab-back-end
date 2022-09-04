@@ -8,28 +8,20 @@ import { Token } from "../entity/token.entity";
 export const Register = async (req : Request, res: Response) => {
     const body = req.body;
 
-    if (body["password"] !== body["password-confirm"]) {
-        return res.status(400).send({
-            message: "Password's do not matches!"
-        });
-    }
-
-    const user = await getRepository(User).save({
+    await getRepository(User).save({
         username: body["username"],
         firstName: body["first-name"],
         lastName: body["last-name"],
         email: body["email"],
         password: await bcryptjs.hash(body["password"], 12),
-        isAdmin: "user"
+        contact: body["contact"],
+        place: body["place"],
+        isAdmin: "user",
+        profilPhoto: body["profil-photo"]
     });
 
     res.send({
-        "id": user.id,
-        "username": user.username,
-        "first-name": user.firstName,
-        "last-name": user.lastName,
-        "email": user.email,
-        "is-admin": user.isAdmin    
+        message: "Success"
     });
 }
 
@@ -78,7 +70,7 @@ export const Login = async (req: Request, res: Response) => {
         expiredAt: expiredAt
     });
 
-    const token = sign({ id: user.id }, process.env.ACCESS_TOKEN || "", { expiresIn: "30s" });
+    const token = sign({ id: user.id }, process.env.ACCESS_TOKEN || "", { expiresIn: "15m" });
 
     res.send({
         token
@@ -114,8 +106,9 @@ export const AuthenticatedUser = async (req: Request, res: Response) => {
             "username": user.username,
             "first-name": user.firstName,
             "last-name": user.lastName,
-            "email": user.email,
-            "is-admin": user.isAdmin    
+            "contact": user.contact,
+            "place": user.place,
+            "is-admin": user.isAdmin
         });
     }
     catch (e) {
@@ -150,10 +143,10 @@ export const Refresh = async (req: Request, res: Response) => {
             });
         }
 
-        const token = sign({ id: payload["id"] }, process.env.ACCESS_TOKEN || "", { expiresIn: "30s" });
+        const token = sign({ id: payload["id"] }, process.env.ACCESS_TOKEN || "", { expiresIn: "1m" });
 
         res.send({
-            token
+            message: "refreshed"
         });
     }
     catch (e) {
