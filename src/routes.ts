@@ -15,6 +15,7 @@ export const routes = (router: Router) => {
     router.get("/api/admin", Admin.GetAll);
     router.get("/api/admin/:id", Admin.Get);
     router.delete("/api/admin/:id", Admin.Delete);
+    router.get("/api/incident", Document.GetAll);
     router.get("/api/incident/:id", Document.Get);
     router.post("/api/user/:id/incident/", Document.Create);
 }
